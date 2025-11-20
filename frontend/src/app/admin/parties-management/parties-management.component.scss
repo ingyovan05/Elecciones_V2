@@ -1,0 +1,64 @@
+.manager-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.create-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.table-container {
+  border-radius: 1rem;
+  overflow-x: auto;
+}
+
+.manager-table {
+  width: 100%;
+
+  th {
+    background: rgba(255, 255, 255, 0.04);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  td,
+  th {
+    padding: 0.9rem;
+  }
+}
+
+.audit-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  strong {
+    font-weight: 600;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.action-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.empty-state {
+  td {
+    text-align: center;
+    padding: 2rem;
+  }
+}

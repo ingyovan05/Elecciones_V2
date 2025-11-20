@@ -1,0 +1,43 @@
+<mat-toolbar class="app-toolbar">
+  <div class="title-group">
+    <span class="app-title">{{ title }}</span>
+    <span class="app-subtitle">Colombia</span>
+  </div>
+  <span class="spacer"></span>
+  <button
+    mat-icon-button
+    matTooltip="Cambiar tema"
+    (click)="toggleTheme()"
+    aria-label="Cambiar tema"
+  >
+    <mat-icon>{{ (theme$ | async) === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+  <ng-container *ngIf="auth.currentUser$ | async as user">
+    <div class="desktop-actions">
+      <button mat-button (click)="goToPanel()">Panel principal</button>
+      <button mat-button *ngIf="user.role === 'ADMIN'" (click)="goToAdmin()">Administrar catálogos</button>
+      <button mat-stroked-button (click)="logout()">Cerrar sesión ({{ user.username }})</button>
+    </div>
+    <button
+      class="mobile-menu"
+      mat-icon-button
+      [matMenuTriggerFor]="appMenu"
+      aria-label="Abrir menú"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #appMenu="matMenu">
+      <button mat-menu-item (click)="goToPanel()">Panel principal</button>
+      <button mat-menu-item *ngIf="user.role === 'ADMIN'" (click)="goToAdmin()">
+        Administración de catálogos
+      </button>
+      <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+    </mat-menu>
+  </ng-container>
+</mat-toolbar>
+
+<main class="app-content bg-surface min-h-[calc(100vh-64px)] transition-colors duration-300">
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <router-outlet />
+  </div>
+</main>

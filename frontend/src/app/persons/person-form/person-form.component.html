@@ -1,0 +1,93 @@
+<form class="person-form-shell" [formGroup]="form" (ngSubmit)="submit()">
+  <section class="panel">
+    <header>
+      <h3>Identificación y contacto</h3>
+      <p>Captura la información básica del ciudadano.</p>
+    </header>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Cédula</mat-label>
+        <input matInput formControlName="cedula" placeholder="Ej: 1032456789" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Primer nombre</mat-label>
+        <input matInput formControlName="firstName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Segundo nombre</mat-label>
+        <input matInput formControlName="middleName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Primer apellido</mat-label>
+        <input matInput formControlName="lastName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Segundo apellido</mat-label>
+        <input matInput formControlName="secondLastName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Partido político</mat-label>
+        <mat-select formControlName="partyId">
+          <mat-option *ngFor="let party of (catalog.parties$ | async) ?? []" [value]="party.id">
+            {{ party.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Departamento</mat-label>
+        <mat-select formControlName="departmentId">
+          <mat-option *ngFor="let dept of (catalog.departments$ | async) ?? []" [value]="dept.id">
+            {{ dept.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Municipio</mat-label>
+        <mat-select formControlName="municipalityId">
+          <mat-option *ngFor="let city of municipalities" [value]="city.id">
+            {{ city.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
+
+  <section class="panel">
+    <header>
+      <h3>Intención de voto</h3>
+      <p>Selecciona la participación prevista en cada proceso electoral.</p>
+    </header>
+    <div class="vote-grid">
+      <div class="vote-card">
+        <div>
+          <p class="vote-title">¿Vota Senado/Cámara?</p>
+          <small>Aplicable a elecciones legislativas.</small>
+        </div>
+        <mat-slide-toggle color="primary" formControlName="votesCongress">
+          {{ form.value.votesCongress ? 'Sí' : 'No' }}
+        </mat-slide-toggle>
+      </div>
+      <div class="vote-card">
+        <div>
+          <p class="vote-title">¿Vota Presidente?</p>
+          <small>Indica si participará en elecciones presidenciales.</small>
+        </div>
+        <mat-slide-toggle color="primary" formControlName="votesPresident">
+          {{ form.value.votesPresident ? 'Sí' : 'No' }}
+        </mat-slide-toggle>
+      </div>
+    </div>
+    <div class="terms-row">
+      <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de información</mat-checkbox>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button mat-stroked-button type="button" (click)="cancelEdit()">
+      {{ form.value.id ? 'Cancelar edición' : 'Limpiar' }}
+    </button>
+    <button mat-raised-button color="primary" type="submit">
+      Guardar registro
+    </button>
+  </div>
+</form>

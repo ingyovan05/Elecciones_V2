@@ -1,0 +1,118 @@
+<section class="anon-wrapper">
+  <div class="hero-header">
+    <div>
+      <p class="subtitle">Registro ciudadano</p>
+      <h2>Registrar persona de manera anónima</h2>
+      <p>
+        La ciudadanía puede reportar intención de voto sin autenticación. Todas las acciones se auditan usando el
+        usuario anónimo del sistema.
+      </p>
+    </div>
+    <button mat-stroked-button color="accent" class="back-button" (click)="goBackToLogin()">
+      Volver al inicio de sesión
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+
+  <mat-card class="glass-panel">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="anon-form">
+      <section class="panel">
+        <header>
+          <h3>Datos personales</h3>
+          <p>Información mínima requerida para el registro ciudadano.</p>
+        </header>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Cédula</mat-label>
+            <input matInput formControlName="cedula" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Primer nombre</mat-label>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo nombre</mat-label>
+            <input matInput formControlName="middleName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Primer apellido</mat-label>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo apellido</mat-label>
+            <input matInput formControlName="secondLastName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Partido político</mat-label>
+            <mat-select formControlName="partyId">
+              <mat-option *ngFor="let party of (catalog.parties$ | async) ?? []" [value]="party.id">
+                {{ party.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <mat-select formControlName="departmentId">
+              <mat-option *ngFor="let dept of (catalog.departments$ | async) ?? []" [value]="dept.id">
+                {{ dept.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ciudad / Municipio</mat-label>
+            <mat-select formControlName="municipalityId">
+              <mat-option *ngFor="let city of municipalities" [value]="city.id">
+                {{ city.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <section class="panel">
+        <header>
+          <h3>Intención de voto</h3>
+          <p>Selecciona la participación informada por el ciudadano.</p>
+        </header>
+        <div class="vote-grid">
+          <div class="vote-card">
+            <div>
+              <p class="vote-title">¿Vota Senado/Cámara?</p>
+              <small>Aplicable para procesos legislativos.</small>
+            </div>
+            <mat-button-toggle-group formControlName="votesCongress" class="toggle-group">
+              <mat-button-toggle [value]="true">Sí</mat-button-toggle>
+              <mat-button-toggle [value]="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div class="vote-card">
+            <div>
+              <p class="vote-title">¿Vota Presidente?</p>
+              <small>Intención declarada para elecciones presidenciales.</small>
+            </div>
+            <mat-button-toggle-group formControlName="votesPresident" class="toggle-group">
+              <mat-button-toggle [value]="true">Sí</mat-button-toggle>
+              <mat-button-toggle [value]="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+        <div class="terms-row">
+          <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de información</mat-checkbox>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</section>

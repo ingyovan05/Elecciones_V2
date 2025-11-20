@@ -1,0 +1,36 @@
+<div class="login-hero">
+  <div class="login-panel">
+    <div class="info-panel">
+      <p class="subtitle">Elecciones Colombia</p>
+      <h1 class="title">Portal Nacional de Registro y Control Electoral</h1>
+      <p class="description">
+        Inicia sesión para registrar ciudadanos, gestionar partidos, departamentos y monitorear el comportamiento electoral con auditoría en tiempo real.
+      </p>
+      <button mat-stroked-button color="accent" (click)="goAnonymous()">
+        Registrar de manera anónima
+      </button>
+    </div>
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Ingreso seguro</mat-card-title>
+        <mat-card-subtitle>Bloqueo automático y auditoría de sesiones.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="form-stack" [formGroup]="form" (ngSubmit)="submit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="Ingresa tu usuario" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="'password'" formControlName="password" placeholder="Contraseña" />
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" class="w-full">
+            Ingresar al portal
+          </button>
+          <mat-hint *ngIf="message" class="error">{{ message }}</mat-hint>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

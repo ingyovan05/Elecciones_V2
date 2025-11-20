@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: elecciones_db
+  #   environment:
+  #     POSTGRES_DB: elecciones
+  #     POSTGRES_USER: elecciones
+  #     POSTGRES_PASSWORD: elecciones
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #     - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+  #     - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+  #   ports:
+  #     - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: elecciones_backend
+    # depends_on:
+    #   - db
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://neondb_owner:npg_gVRjEta1di7l@ep-rapid-hill-ad6xzhvj-pooler.c-2.us-east-1.aws.neon.tech/Elecciones?sslmode=require&channel_binding=require
+      JWT_SECRET: changeme_super_secret
+      ANON_USER_ID: 00000000-0000-0000-0000-000000000002
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: elecciones_frontend
+    depends_on:
+      - backend
+    environment:
+      PORT: 80
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres-data:

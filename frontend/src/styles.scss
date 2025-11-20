@@ -1,0 +1,105 @@
+@use '@angular/material' as mat;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$primary: mat.define-palette(mat.$indigo-palette, 600);
+$accent: mat.define-palette(mat.$amber-palette, 400);
+$warn: mat.define-palette(mat.$red-palette);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+  typography: mat.define-typography-config(),
+));
+
+$dark-primary: mat.define-palette(mat.$blue-grey-palette, 200);
+$dark-accent: mat.define-palette(mat.$deep-orange-palette, 200);
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $warn,
+  ),
+  typography: mat.define-typography-config(),
+));
+
+@include mat.core();
+@include mat.all-component-themes($light-theme);
+
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+:root {
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+body.light-theme {
+  --surface-color: #f7f8fc;
+  --surface-elevated: #ffffff;
+  --text-color: #0f172a;
+  --text-muted: #475569;
+  --toolbar-bg: linear-gradient(135deg, #fff9c4, #ffe27a, #ffc107);
+  --toolbar-color: #0f172a;
+  --toolbar-border: rgba(15, 23, 42, 0.15);
+  --toolbar-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
+  background: var(--surface-color);
+  color: var(--text-color);
+}
+
+body.dark-theme {
+  --surface-color: #050b18;
+  --surface-elevated: #111a2b;
+  --text-color: #f8fafc;
+  --text-muted: #cbd5f5;
+  --toolbar-bg: linear-gradient(135deg, #02223d, #010b1c);
+  --toolbar-color: #f1f5f9;
+  --toolbar-border: rgba(226, 232, 240, 0.12);
+  --toolbar-shadow: 0 12px 30px rgba(2, 6, 23, 0.6);
+  background: var(--surface-color);
+  color: var(--text-color);
+}
+
+body {
+  background-color: var(--surface-color);
+  color: var(--text-color);
+}
+
+.bg-surface {
+  background-color: var(--surface-color);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.mat-card {
+  border-radius: 1rem;
+  background-color: var(--surface-elevated);
+  color: inherit;
+  backdrop-filter: saturate(180%) blur(10px);
+}
+
+.dark-theme .mat-card {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.dark-theme .mat-mdc-menu-panel {
+  background: #111a2b;
+  color: var(--text-color);
+}
+
+.dark-theme .mat-mdc-menu-item-text {
+  color: var(--text-color);
+}
