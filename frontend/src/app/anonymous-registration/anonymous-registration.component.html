@@ -2,14 +2,14 @@
   <div class="hero-header">
     <div>
       <p class="subtitle">Registro ciudadano</p>
-      <h2>Registrar persona de manera anónima</h2>
+      <h2>Registrar persona de manera an&oacute;nima</h2>
       <p>
-        La ciudadanía puede reportar intención de voto sin autenticación. Todas las acciones se auditan usando el
-        usuario anónimo del sistema.
+        La ciudadan&iacute;a puede reportar intenci&oacute;n de voto sin autenticaci&oacute;n. Todas las acciones se auditan usando el
+        usuario an&oacute;nimo del sistema.
       </p>
     </div>
     <button mat-stroked-button color="accent" class="back-button" (click)="goBackToLogin()">
-      Volver al inicio de sesión
+      Volver al inicio de sesi&oacute;n
       <mat-icon>logout</mat-icon>
     </button>
   </div>
@@ -19,41 +19,50 @@
       <section class="panel">
         <header>
           <h3>Datos personales</h3>
-          <p>Información mínima requerida para el registro ciudadano.</p>
+          <p>Informaci&oacute;n m&iacute;nima requerida para el registro ciudadano.</p>
         </header>
         <div class="form-grid">
           <mat-form-field appearance="outline">
-            <mat-label>Cédula</mat-label>
+            <mat-label>C&eacute;dula</mat-label>
             <input matInput formControlName="cedula" />
+            <mat-error *ngIf="controlInvalid('cedula', 'required')">Campo obligatorio.</mat-error>
+            <mat-error *ngIf="controlInvalid('cedula', 'pattern')">Usa solo n&uacute;meros (6 a 12 d&iacute;gitos).</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Primer nombre</mat-label>
             <input matInput formControlName="firstName" />
+            <mat-error *ngIf="controlInvalid('firstName', 'required')">Campo obligatorio.</mat-error>
+            <mat-error *ngIf="controlInvalid('firstName', 'pattern')">Solo letras y espacios (m&iacute;nimo 2 caracteres).</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Segundo nombre</mat-label>
             <input matInput formControlName="middleName" />
+            <mat-error *ngIf="controlInvalid('middleName', 'pattern')">Solo letras y espacios.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Primer apellido</mat-label>
             <input matInput formControlName="lastName" />
+            <mat-error *ngIf="controlInvalid('lastName', 'required')">Campo obligatorio.</mat-error>
+            <mat-error *ngIf="controlInvalid('lastName', 'pattern')">Solo letras y espacios.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Segundo apellido</mat-label>
             <input matInput formControlName="secondLastName" />
+            <mat-error *ngIf="controlInvalid('secondLastName', 'pattern')">Solo letras y espacios.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Partido político</mat-label>
+            <mat-label>Partido pol&iacute;tico</mat-label>
             <mat-select formControlName="partyId">
               <mat-option *ngFor="let party of (catalog.parties$ | async) ?? []" [value]="party.id">
                 {{ party.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="controlInvalid('partyId')">Selecciona un partido.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -63,6 +72,7 @@
                 {{ dept.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="controlInvalid('departmentId')">Selecciona un departamento.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -72,39 +82,41 @@
                 {{ city.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="controlInvalid('municipalityId')">Selecciona un municipio.</mat-error>
           </mat-form-field>
         </div>
       </section>
 
       <section class="panel">
         <header>
-          <h3>Intención de voto</h3>
-          <p>Selecciona la participación informada por el ciudadano.</p>
+          <h3>Intenci&oacute;n de voto</h3>
+          <p>Selecciona la participaci&oacute;n informada por el ciudadano.</p>
         </header>
         <div class="vote-grid">
           <div class="vote-card">
             <div>
-              <p class="vote-title">¿Vota Senado/Cámara?</p>
+              <p class="vote-title">&iquest;Vota Senado/C&aacute;mara?</p>
               <small>Aplicable para procesos legislativos.</small>
             </div>
             <mat-button-toggle-group formControlName="votesCongress" class="toggle-group">
-              <mat-button-toggle [value]="true">Sí</mat-button-toggle>
+              <mat-button-toggle [value]="true">S&iacute;</mat-button-toggle>
               <mat-button-toggle [value]="false">No</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
           <div class="vote-card">
             <div>
-              <p class="vote-title">¿Vota Presidente?</p>
-              <small>Intención declarada para elecciones presidenciales.</small>
+              <p class="vote-title">&iquest;Vota Presidente?</p>
+              <small>Intenci&oacute;n declarada para elecciones presidenciales.</small>
             </div>
             <mat-button-toggle-group formControlName="votesPresident" class="toggle-group">
-              <mat-button-toggle [value]="true">Sí</mat-button-toggle>
+              <mat-button-toggle [value]="true">S&iacute;</mat-button-toggle>
               <mat-button-toggle [value]="false">No</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
         </div>
         <div class="terms-row">
-          <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de información</mat-checkbox>
+          <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de informaci&oacute;n</mat-checkbox>
+          <mat-error *ngIf="controlInvalid('acceptsTerms')">Debes aceptar las condiciones.</mat-error>
         </div>
       </section>
 

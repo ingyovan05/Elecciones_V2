@@ -30,9 +30,12 @@ import { ApiService } from '../../core/services/api.service';
   styleUrls: ['./departments-management.component.scss'],
 })
 export class DepartmentsManagementComponent implements OnInit {
+  private readonly danePattern = /^[0-9]{2,10}$/;
+  private readonly namePattern = /^[A-Za-z\u00C0-\u017F\s'-]{2,80}$/;
+
   form = this.fb.nonNullable.group({
-    daneCode: ['', Validators.required],
-    name: ['', Validators.required],
+    daneCode: ['', [Validators.required, Validators.pattern(this.danePattern)]],
+    name: ['', [Validators.required, Validators.pattern(this.namePattern)]],
   });
 
   displayedColumns = ['daneCode', 'name', 'createdBy', 'updatedBy', 'isActive', 'actions'];
@@ -54,7 +57,10 @@ export class DepartmentsManagementComponent implements OnInit {
   }
 
   save() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const payload = this.form.getRawValue();
     const isEditing = !!this.editingId;
     const request$ = isEditing
@@ -89,6 +95,16 @@ export class DepartmentsManagementComponent implements OnInit {
   cancelEdit() {
     this.editingId = null;
     this.form.reset();
+  }
+
+  controlInvalid(controlName: string, error?: string) {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const interacted = control.dirty || control.touched;
+    if (error) {
+      return control.hasError(error) && interacted;
+    }
+    return control.invalid && interacted;
   }
 
   deactivate(item: any) {

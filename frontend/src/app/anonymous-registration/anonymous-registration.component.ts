@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -36,12 +35,15 @@ import { ApiService } from '../core/services/api.service';
   styleUrls: ['./anonymous-registration.component.scss'],
 })
 export class AnonymousRegistrationComponent implements OnInit {
+  private readonly cedulaPattern = /^[0-9]{6,12}$/;
+  private readonly namePattern = /^[A-Za-z\u00C0-\u017F\s'-]{2,60}$/;
+
   form = this.fb.nonNullable.group({
-    cedula: ['', Validators.required],
-    firstName: ['', Validators.required],
-    middleName: [''],
-    lastName: ['', Validators.required],
-    secondLastName: [''],
+    cedula: ['', [Validators.required, Validators.pattern(this.cedulaPattern)]],
+    firstName: ['', [Validators.required, Validators.pattern(this.namePattern)]],
+    middleName: ['', Validators.pattern(this.namePattern)],
+    lastName: ['', [Validators.required, Validators.pattern(this.namePattern)]],
+    secondLastName: ['', Validators.pattern(this.namePattern)],
     partyId: ['', Validators.required],
     votesCongress: [false],
     votesPresident: [false],
@@ -71,7 +73,10 @@ export class AnonymousRegistrationComponent implements OnInit {
   }
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.api.post('/api/persons/anonymous', this.form.getRawValue()).subscribe({
       next: () => {
         this.snack.open('Registro guardado', 'Cerrar', { duration: 2500 });
@@ -88,5 +93,15 @@ export class AnonymousRegistrationComponent implements OnInit {
 
   goBackToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  controlInvalid(controlName: string, error?: string) {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const interacted = control.dirty || control.touched;
+    if (error) {
+      return control.hasError(error) && interacted;
+    }
+    return control.invalid && interacted;
   }
 }

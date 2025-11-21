@@ -32,6 +32,9 @@ import { ApiService } from '../../core/services/api.service';
   styleUrls: ['./users-management.component.scss'],
 })
 export class UsersManagementComponent implements OnInit {
+  private readonly usernamePattern = /^[A-Za-z0-9._-]{4,30}$/;
+  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
   displayedColumns = ['username', 'role', 'isBlocked', 'isActive', 'actions'];
   data: any[] = [];
   roleOptions = [
@@ -40,8 +43,8 @@ export class UsersManagementComponent implements OnInit {
   ];
 
   form = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
+    username: ['', [Validators.required, Validators.pattern(this.usernamePattern)]],
+    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
     role: ['NORMAL', Validators.required],
   });
 
@@ -60,7 +63,10 @@ export class UsersManagementComponent implements OnInit {
   }
 
   create() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.api.post('/api/users', this.form.getRawValue()).subscribe({
       next: () => {
         this.snack.open('Usuario creado', 'Cerrar', { duration: 2500 });
@@ -84,5 +90,15 @@ export class UsersManagementComponent implements OnInit {
       this.snack.open('Usuario desbloqueado', 'Cerrar', { duration: 2000 });
       this.load();
     });
+  }
+
+  controlInvalid(controlName: string, error?: string) {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const interacted = control.dirty || control.touched;
+    if (error) {
+      return control.hasError(error) && interacted;
+    }
+    return control.invalid && interacted;
   }
 }

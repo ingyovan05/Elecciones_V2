@@ -1,37 +1,46 @@
 <form class="person-form-shell" [formGroup]="form" (ngSubmit)="submit()">
   <section class="panel">
     <header>
-      <h3>Identificación y contacto</h3>
-      <p>Captura la información básica del ciudadano.</p>
+      <h3>Identificaci&oacute;n y contacto</h3>
+      <p>Captura la informaci&oacute;n b&aacute;sica del ciudadano.</p>
     </header>
     <div class="form-grid">
       <mat-form-field appearance="outline">
-        <mat-label>Cédula</mat-label>
+        <mat-label>C&eacute;dula</mat-label>
         <input matInput formControlName="cedula" placeholder="Ej: 1032456789" />
+        <mat-error *ngIf="controlInvalid('cedula', 'required')">Campo obligatorio.</mat-error>
+        <mat-error *ngIf="controlInvalid('cedula', 'pattern')">Usa solo n&uacute;meros (6 a 12 d&iacute;gitos).</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Primer nombre</mat-label>
         <input matInput formControlName="firstName" />
+        <mat-error *ngIf="controlInvalid('firstName', 'required')">Campo obligatorio.</mat-error>
+        <mat-error *ngIf="controlInvalid('firstName', 'pattern')">Solo letras y espacios (m&iacute;nimo 2 caracteres).</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Segundo nombre</mat-label>
         <input matInput formControlName="middleName" />
+        <mat-error *ngIf="controlInvalid('middleName', 'pattern')">Solo letras y espacios.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Primer apellido</mat-label>
         <input matInput formControlName="lastName" />
+        <mat-error *ngIf="controlInvalid('lastName', 'required')">Campo obligatorio.</mat-error>
+        <mat-error *ngIf="controlInvalid('lastName', 'pattern')">Solo letras y espacios.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Segundo apellido</mat-label>
         <input matInput formControlName="secondLastName" />
+        <mat-error *ngIf="controlInvalid('secondLastName', 'pattern')">Solo letras y espacios.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Partido político</mat-label>
+        <mat-label>Partido pol&iacute;tico</mat-label>
         <mat-select formControlName="partyId">
           <mat-option *ngFor="let party of (catalog.parties$ | async) ?? []" [value]="party.id">
             {{ party.name }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="controlInvalid('partyId')">Selecciona un partido.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Departamento</mat-label>
@@ -40,6 +49,7 @@
             {{ dept.name }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="controlInvalid('departmentId')">Selecciona un departamento.</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Municipio</mat-label>
@@ -48,43 +58,45 @@
             {{ city.name }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="controlInvalid('municipalityId')">Selecciona un municipio.</mat-error>
       </mat-form-field>
     </div>
   </section>
 
   <section class="panel">
     <header>
-      <h3>Intención de voto</h3>
-      <p>Selecciona la participación prevista en cada proceso electoral.</p>
+      <h3>Intenci&oacute;n de voto</h3>
+      <p>Selecciona la participaci&oacute;n prevista en cada proceso electoral.</p>
     </header>
     <div class="vote-grid">
       <div class="vote-card">
         <div>
-          <p class="vote-title">¿Vota Senado/Cámara?</p>
+          <p class="vote-title">&iquest;Vota Senado/C&aacute;mara?</p>
           <small>Aplicable a elecciones legislativas.</small>
         </div>
         <mat-slide-toggle color="primary" formControlName="votesCongress">
-          {{ form.value.votesCongress ? 'Sí' : 'No' }}
+          {{ form.value.votesCongress ? 'S&iacute;' : 'No' }}
         </mat-slide-toggle>
       </div>
       <div class="vote-card">
         <div>
-          <p class="vote-title">¿Vota Presidente?</p>
-          <small>Indica si participará en elecciones presidenciales.</small>
+          <p class="vote-title">&iquest;Vota Presidente?</p>
+          <small>Indica si participar&aacute; en elecciones presidenciales.</small>
         </div>
         <mat-slide-toggle color="primary" formControlName="votesPresident">
-          {{ form.value.votesPresident ? 'Sí' : 'No' }}
+          {{ form.value.votesPresident ? 'S&iacute;' : 'No' }}
         </mat-slide-toggle>
       </div>
     </div>
     <div class="terms-row">
-      <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de información</mat-checkbox>
+      <mat-checkbox formControlName="acceptsTerms">Acepto las condiciones de uso de informaci&oacute;n</mat-checkbox>
+      <mat-error *ngIf="controlInvalid('acceptsTerms')">Debes aceptar las condiciones.</mat-error>
     </div>
   </section>
 
   <div class="actions">
     <button mat-stroked-button type="button" (click)="cancelEdit()">
-      {{ form.value.id ? 'Cancelar edición' : 'Limpiar' }}
+      {{ form.value.id ? 'Cancelar edici&oacute;n' : 'Limpiar' }}
     </button>
     <button mat-raised-button color="primary" type="submit">
       Guardar registro

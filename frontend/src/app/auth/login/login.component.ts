@@ -27,9 +27,12 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  private readonly usernamePattern = /^[A-Za-z0-9._-]{4,30}$/;
+  private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
   form = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
+    username: ['', [Validators.required, Validators.pattern(this.usernamePattern)]],
+    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
   });
   message?: string;
 
@@ -47,6 +50,7 @@ export class LoginComponent implements OnInit {
 
   submit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
     this.auth.login(this.form.getRawValue()).subscribe({
@@ -62,5 +66,15 @@ export class LoginComponent implements OnInit {
 
   goAnonymous() {
     this.router.navigate(['/registro-anonimo']);
+  }
+
+  controlInvalid(controlName: string, error?: string) {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const interacted = control.dirty || control.touched;
+    if (error) {
+      return control.hasError(error) && interacted;
+    }
+    return control.invalid && interacted;
   }
 }

@@ -30,9 +30,12 @@ import { ApiService } from '../../core/services/api.service';
   styleUrls: ['./parties-management.component.scss'],
 })
 export class PartiesManagementComponent implements OnInit {
+  private readonly namePattern = /^[A-Za-z\u00C0-\u017F\s'-]{3,80}$/;
+  private readonly codePattern = /^[A-Za-z0-9]{2,10}$/;
+
   form = this.fb.nonNullable.group({
-    name: ['', Validators.required],
-    code: [''],
+    name: ['', [Validators.required, Validators.pattern(this.namePattern)]],
+    code: ['', Validators.pattern(this.codePattern)],
   });
 
   displayedColumns = ['name', 'code', 'createdBy', 'updatedBy', 'isActive', 'actions'];
@@ -54,7 +57,10 @@ export class PartiesManagementComponent implements OnInit {
   }
 
   save() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const payload = this.form.getRawValue();
     const isEditing = !!this.editingId;
     const request$ = isEditing
@@ -85,6 +91,16 @@ export class PartiesManagementComponent implements OnInit {
   cancelEdit() {
     this.editingId = null;
     this.form.reset();
+  }
+
+  controlInvalid(controlName: string, error?: string) {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const interacted = control.dirty || control.touched;
+    if (error) {
+      return control.hasError(error) && interacted;
+    }
+    return control.invalid && interacted;
   }
 
   deactivate(party: any) {
